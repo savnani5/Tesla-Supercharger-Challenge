@@ -1,16 +1,13 @@
-Your objective is to construct a search algorithm to find the minimum time path through the tesla
-network of supercharging stations. Each supercharger will refuel the vehicle at a different rate
-given in km/hr of charge time. Your route does not have to fully charge at every visited charger,
-so long as it never runs out of charge between two chargers. You should expect to need no more 
-than 4-6 hours to solve this problem. We suggest implementing a quick brute force method before
-attempting to find an optimal routine.
+## Minimum Cost Path for the Vehicle Refueling
+
+Your objective is to construct a search algorithm to find the minimum time path through the network of vehicle supercharging stations. Each supercharger will refuel the vehicle at a different rate
+given in km/hr of charge time. Your route does not have to fully charge at every visited charger, so long as it never runs out of charge between two chargers. 
 
 
 You will be provided with a code skeleton which includes a header with the charger network data
 in the format:
 
 	name, latitude in degrees, longitude in degrees, charge rate in km/hr
-
 
 You may compare your solutions against our reference implementation using the provided
 "checker" programs in either OSX or linux, make sure to use it to check your submission output
@@ -52,9 +49,7 @@ You should make the following assumptions:
 	The car travels at a constant speed of 105km/hr along great circle routes between chargers
 	The Earth is a sphere of radius 6356.752km
 
-
-Your submission will be run against several start and end chargers and evaluated in terms of the 
-following metrics:
+Evaluation Metrics:
 
 	Path satisfiability (car remains above 0km of range throughout entire trip)
 	Path optimality (total time driving + charging)
@@ -63,11 +58,9 @@ following metrics:
 	Computational cost
 
 
-You should ensure that your submission compiles under gcc 4.8.4 with optimization level 1, for example:
+Ensure that your solution compiles under gcc 4.8.4 with optimization level 1:
 
 	g++ -std=c++11 -O1 main.cpp network.cpp -o solution
-
-if your solution includes additional cpp files, include a README file with the appropriate compiler string.
 
 
 The solution needs to be self-contained with just the use of STL algorithms (i.e. do not use off-the-shelf packages).
