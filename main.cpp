@@ -16,7 +16,6 @@
 
 #define th2r(x) (x*3.141592653589/180.0)
 
-using namespace std;
 
 /**
  * @brief Node Class 
@@ -49,7 +48,7 @@ public:
 class HashFunction {
 public:
     size_t operator()(const Node& p) const{
-        return (hash<string>()(p.value.name)) ^ (hash<int>()(p.capacity));
+        return (std::hash<std::string>()(p.value.name)) ^ (std::hash<int>()(p.capacity));
     }
 };
 
@@ -67,14 +66,14 @@ private:
     float radius;                                                   //Earth's Radius
     float divisions;                                                //No of divisions for battery capacity
     struct CompareValue;                                            //Custom struct to compare values in priority queue
-    vector<vector<float>> DistanceMatrix;                           //Great Circle distances between charging stations
+    std::vector<std::vector<float>> DistanceMatrix;                           //Great Circle distances between charging stations
 
 public:
-    unordered_map<Node, vector<Node>, HashFunction> adjlist;                             //Adjacency list of graph
+    std::unordered_map<Node, std::vector<Node>, HashFunction> adjlist;                             //Adjacency list of graph
     Graph(int n, float max_capacity, float velcity, float radius, float divisions);      //Graph constructor
     void generateDistanceMatrix();                                                       //Fucntion to generate Time Matrix
     void generateGraph();                                                                //Fucntion to generate Graph Adjacency list
-    void backtrack(unordered_map<Node, Node, HashFunction> cameFrom, Node current);      //Backtracking function to find the shortest path once goal is reached
+    void backtrack(std::unordered_map<Node, Node, HashFunction> cameFrom, Node current);      //Backtracking function to find the shortest path once goal is reached
     float heuristic(Node start, Node goal);                                              //A star search heuristic function
     void astarSearch(Node start, Node goal);                                             //Optimized A Star search function
 };
@@ -95,7 +94,7 @@ Graph::Graph(int n, float max_capacity, float velocity, float radius, float divi
     this->velocity = velocity;
     this->radius = radius;
     this->divisions = divisions;
-    vector<vector<float>> DistanceMatrix(n, vector<float>(n, 0.0));
+    std::vector<std::vector<float>> DistanceMatrix(n, std::vector<float>(n, 0.0));
     this->DistanceMatrix = DistanceMatrix;
 }
 
@@ -169,9 +168,9 @@ void Graph::generateGraph()
  * @param cameFrom map of parent child nodes for backtracking
  * @param current goal node 
  */
-void Graph::backtrack(unordered_map<Node, Node, HashFunction> cameFrom, Node current)
+void Graph::backtrack(std::unordered_map<Node, Node, HashFunction> cameFrom, Node current)
 {
-    vector<Node> path;
+    std::vector<Node> path;
     path.push_back(current);
     while(cameFrom.find(current)!=cameFrom.end())
     {
@@ -179,7 +178,7 @@ void Graph::backtrack(unordered_map<Node, Node, HashFunction> cameFrom, Node cur
         path.insert(path.begin(), current);
     }
     
-    cout << path[0].value.name << ", ";
+    std::cout << path[0].value.name << ", ";
     float time_for_each_div; int count=0;
     Node last_node = path[1];
 
@@ -188,13 +187,13 @@ void Graph::backtrack(unordered_map<Node, Node, HashFunction> cameFrom, Node cur
         if(last_node.value.name!=it->value.name)
         {
             time_for_each_div = (max_capacity/last_node.value.rate)/divisions;
-            cout << last_node.value.name << ", " <<  count*time_for_each_div << ", ";
+            std::cout << last_node.value.name << ", " <<  count*time_for_each_div << ", ";
             count=0;
         }
         count++;
         last_node = *it;
     }
-    cout << path[path.size()-1].value.name << endl;
+    std::cout << path[path.size()-1].value.name << std::endl;
 }
 
 /**
@@ -217,7 +216,7 @@ float Graph::heuristic(Node start, Node goal)
  * @brief This structure implements the operator overloading for the custom prioirty queue values.
  */
 struct Graph::CompareValue {
-    bool operator()(pair<float, Node> const& p1, pair<float, Node> const& p2) const{
+    bool operator()(std::pair<float, Node> const& p1, std::pair<float, Node> const& p2) const{
         return p1.first > p2.first;
     }
 };
@@ -237,7 +236,7 @@ void Graph::astarSearch(Node start, Node goal)
         {
             if(network[i].name==start.value.name && network[j].name==goal.value.name && DistanceMatrix[i][j] <= 320)
             {
-                cout << start.value.name << ", " << goal.value.name << endl;
+                std::cout << start.value.name << ", " << goal.value.name << std::endl;
                 return;
             }
         }
@@ -245,15 +244,15 @@ void Graph::astarSearch(Node start, Node goal)
 
     // Cost will be time (time to come to this node + time to reach destination)
     // Min heap of (fScore, Node)
-    priority_queue<pair<float, Node>, vector<pair<float, Node>>, CompareValue> pq;   
+    std::priority_queue<std::pair<float, Node>, std::vector<std::pair<float, Node>>, CompareValue> pq;   
 
     // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from start
     // to n currently known.
-    unordered_map<Node, Node, HashFunction> cameFrom;
+    std::unordered_map<Node, Node, HashFunction> cameFrom;
     
-    unordered_map<Node, float, HashFunction> gScore;
+    std::unordered_map<Node, float, HashFunction> gScore;
     for(auto element:adjlist)
-        gScore[element.first] = numeric_limits<float>::max();
+        gScore[element.first] = std::numeric_limits<float>::max();
         
     // Initilaize 
     gScore[start] = 0.0;  // in hrs
@@ -290,7 +289,7 @@ void Graph::astarSearch(Node start, Node goal)
             }
         }
     }
-    cout << "Failure" << endl;
+    std::cout << "Failure" << std::endl;
     return;
 }
 
@@ -308,7 +307,7 @@ int main(int argc, char** argv)
 
     if(initial_charger_name==goal_charger_name)
     {
-        cout << "Same Start and Goal Locations";
+        std::cout << "Same Start and Goal Locations";
         return 0;
     }
 
@@ -331,12 +330,12 @@ int main(int argc, char** argv)
     {
         if(element.first.value.name==initial_charger_name)
         {
-            max_cap = max(max_cap, element.first.capacity);
+            max_cap = std::max(max_cap, element.first.capacity);
             start = Node(element.first.value, max_cap);
         }
         if(element.first.value.name==goal_charger_name)
         {
-            min_cap = min(min_cap, element.first.capacity);
+            min_cap = std::min(min_cap, element.first.capacity);
             goal = Node(element.first.value, min_cap);
         }
     }

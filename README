@@ -65,7 +65,7 @@ following metrics:
 
 You should ensure that your submission compiles under gcc 4.8.4 with optimization level 1, for example:
 
-	g++ -std=c++11 -O1 main.cpp network.cpp -o candidate_solution
+	g++ -std=c++11 -O1 main.cpp network.cpp -o solution
 
 if your solution includes additional cpp files, include a README file with the appropriate compiler string.
 
