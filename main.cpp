@@ -4,7 +4,7 @@
 2) https://i11www.iti.kit.edu/extra/publications/bdgwz-sfpcs-15.pdf
 3)  https://www.sciencedirect.com/science/article/abs/pii/0377221782902053
 */
-// Compiler String: g++ -std=c++11 -O1 main.cpp network.cpp -o candidate_solution 
+// Compiler String: g++ -std=c++11 -O1 main.cpp network.cpp -o solution 
 
 #include <cmath>
 #include <climits>
